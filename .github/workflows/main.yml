@@ -27,8 +27,7 @@ jobs:
 
       # Cek env
       - name: Check Env
-        run: |
-          echo $CSV_URL
+        run: echo $CSV_URL
 
       # Install dependencies
       - name: Install dependencies
@@ -37,26 +36,6 @@ jobs:
           pip install mlflow scikit-learn pandas
 
       # Jalankan MLflow Project
-      - name: Run mlflow project
+      - name: Run MLflow project
         run: |
           mlflow run MLProject --env-manager=local
-
-      # Setup Git LFS
-      - name: Set up Git LFS
-        run: |
-          git config --global user.name "${{ secrets.username }}"
-          git config --global user.email "${{ secrets.email }}"
-          git lfs install
-          git lfs track "mlruns/**"
-          git add .gitattributes
-          git commit -m "Track large files in mlruns with Git LFS" || true
-          git push origin main
-
-      # Push hasil mlruns ke repo
-      - name: Save mlruns to repo
-        run: |
-          git config --global user.name "${{ secrets.username }}"
-          git config --global user.email "${{ secrets.email }}"
-          git add -f mlruns/
-          git commit -m "Save mlruns from CI run" || true
-          git push origin main
